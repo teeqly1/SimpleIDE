@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple IDE - Редактор</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CodeMirror -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+    
+    <!-- Собственные стили -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Верхняя панель инструментов -->
+    <div id="toolbar">
+        <div class="toolbar-left">
+            <button id="btn-back" title="На главную">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="toolbar-separator"></div>
+            <button id="btn-save" title="Сохранить текущий файл">
+                <i class="fas fa-save"></i>
+                <span>Сохранить</span>
+            </button>
+            <button id="btn-run" title="Запустить проект">
+                <i class="fas fa-play"></i>
+                <span>Запустить</span>
+            </button>
+            <button id="btn-stop" title="Остановить выполнение">
+                <i class="fas fa-stop"></i>
+                <span>Остановить</span>
+            </button>
+        </div>
+        <div class="toolbar-right">
+            <span id="project-name" style="color: #969696; font-size: 13px; margin-right: 10px;"></span>
+            <button id="btn-settings" title="Настройки проекта">
+                <i class="fas fa-cog"></i>
+                <span>Проект</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Основная рабочая область -->
+    <div id="main-container">
+        <!-- Левая панель - Файловый менеджер -->
+        <div id="explorer-panel">
+            <div class="panel-header">
+                <h3 id="project-root-name">Проводник</h3>
+                <div class="explorer-actions">
+                    <button id="btn-new-file" title="Новый файл">
+                        <i class="fas fa-file-plus"></i>
+                    </button>
+                    <button id="btn-new-folder" title="Новая папка">
+                        <i class="fas fa-folder-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="file-tree">
+                <div class="empty-state">
+                    <i class="fas fa-code"></i>
+                    <p>Загрузка проекта...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Центральная область -->
+        <div id="editor-panel">
+            <!-- Вкладки открытых файлов -->
+            <div id="tabs-bar">
+                <div class="tabs-container">
+                    <div class="tab active" data-path="">
+                        <span>untitled</span>
+                        <button class="tab-close">&times;</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Редактор кода -->
+            <div id="editor-container">
+                <textarea id="code-editor"></textarea>
+            </div>
+            
+            <!-- Консоль вывода -->
+            <div id="console-panel">
+                <div class="panel-header">
+                    <h3>Консоль</h3>
+                    <button id="btn-clear-console" title="Очистить консоль">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+                <div id="console-output">
+                    <div class="console-line">Добро пожаловать в Simple IDE!</div>
+                    <div class="console-line">Готов к работе...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно настроек проекта -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Настройки проекта</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="start-file">Стартовый файл:</label>
+                    <select id="start-file">
+                        <option value="">Выберите файл...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pre-command">Команда перед запуском:</label>
+                    <input type="text" id="pre-command" placeholder="Например: pip install -r requirements.txt">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-save-settings" class="btn-primary">Сохранить</button>
+                <button class="btn-secondary modal-cancel">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Контекстное меню -->
+    <div id="context-menu" class="context-menu">
+        <div class="context-item" data-action="open">
+            <i class="fas fa-folder-open"></i> Открыть
+        </div>
+        <div class="context-item" data-action="new-file">
+            <i class="fas fa-file-plus"></i> Новый файл
+        </div>
+        <div class="context-item" data-action="new-folder">
+            <i class="fas fa-folder-plus"></i> Новая папка
+        </div>
+        <div class="context-separator"></div>
+        <div class="context-item" data-action="rename">
+            <i class="fas fa-edit"></i> Переименовать
+        </div>
+        <div class="context-item" data-action="delete">
+            <i class="fas fa-trash"></i> Удалить
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    
+    <!-- Eel -->
+    <script type="text/javascript" src="/eel.js"></script>
+    
+    <!-- Основной скрипт -->
+    <script src="js/main.js"></script>
+    <script>
+        // Загрузка проекта при открытии IDE
+        window.addEventListener('load', async () => {
+            const projectPath = localStorage.getItem('currentProject');
+            if (projectPath) {
+                try {
+                    const result = await eel.open_project(projectPath)();
+                    if (result.success) {
+                        window.ide.currentProject = result.projectPath;
+                        window.ide.isProjectOpen = true;
+                        window.ide.config = result.config;
+                        
+                        // Показываем название проекта
+                        const projectName = result.config ? result.config.projectName : projectPath.split('/').pop();
+                        document.getElementById('project-name').textContent = projectName;
+                        document.getElementById('project-root-name').textContent = projectName;
+                        
+                        await window.ide.refreshFileTree();
+                        window.ide.addConsoleLine(`Проект загружен: ${result.projectPath}`, 'success');
+                    }
+                } catch (error) {
+                    console.error('Ошибка загрузки проекта:', error);
+                    window.ide.addConsoleLine('Ошибка загрузки проекта', 'error');
+                }
+            }
+        });
+        
+        // Кнопка назад
+        document.getElementById('btn-back').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

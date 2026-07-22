@@ -1,0 +1,88 @@
+{
+  "app": {
+    "name": "Simple IDE",
+    "description": "Легкая среда разработки"
+  },
+  "welcome": {
+    "create_project": "Создать проект",
+    "create_project_desc": "Создать новую папку с проектом",
+    "open_project": "Открыть проект",
+    "open_project_desc": "Открыть существующий проект (project.json)",
+    "init_project": "Инициализировать проект",
+    "init_project_desc": "Создать project.json в существующей папке",
+    "recent_projects": "Последние проекты",
+    "no_recent": "Нет недавних проектов"
+  },
+  "toolbar": {
+    "save": "Сохранить",
+    "run": "Запустить",
+    "stop": "Остановить",
+    "settings": "Проект",
+    "back": "На главную"
+  },
+  "explorer": {
+    "title": "Проводник",
+    "new_file": "Новый файл",
+    "new_folder": "Новая папка",
+    "empty": "Папка пуста",
+    "empty_hint": "Создайте новый файл или папку"
+  },
+  "editor": {
+    "untitled": "untitled"
+  },
+  "console": {
+    "title": "Консоль",
+    "clear": "Очистить консоль",
+    "welcome": "Добро пожаловать в Simple IDE!",
+    "ready": "Готов к работе...",
+    "project_loaded": "Проект загружен",
+    "project_created": "Проект создан",
+    "project_initialized": "Проект инициализирован в",
+    "file_saved": "Файл сохранен",
+    "file_created": "Файл создан",
+    "folder_created": "Папка создана",
+    "file_deleted": "Удалено",
+    "moved": "Перемещено",
+    "running": "Запуск",
+    "stopped": "Выполнение остановлено",
+    "process_finished": "Процесс завершен с кодом"
+  },
+  "settings": {
+    "title": "Настройки проекта",
+    "start_file": "Стартовый файл",
+    "pre_command": "Команда перед запуском",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "select_file": "Выберите файл..."
+  },
+  "context_menu": {
+    "open": "Открыть",
+    "new_file": "Новый файл",
+    "new_folder": "Новая папка",
+    "rename": "Переименовать",
+    "delete": "Удалить"
+  },
+  "messages": {
+    "confirm_delete": "Удалить",
+    "enter_file_name": "Введите имя файла (например, script.py)",
+    "enter_folder_name": "Введите имя папки",
+    "enter_new_name": "Новое имя",
+    "no_project": "Проект не открыт",
+    "no_file_to_save": "Нет открытого файла для сохранения",
+    "no_start_file": "Не выбран стартовый файл. Открыть настройки проекта?",
+    "project_not_found": "В выбранной папке нет project.json. Это не проект IDE.",
+    "folder_not_selected": "Папка не выбрана",
+    "project_name_not_specified": "Имя проекта не указано"
+  },
+  "errors": {
+    "error": "Ошибка",
+    "error_loading": "Ошибка загрузки",
+    "error_saving": "Ошибка сохранения",
+    "error_creating": "Ошибка создания",
+    "error_opening": "Ошибка открытия",
+    "error_running": "Ошибка запуска",
+    "error_moving": "Ошибка перемещения",
+    "file_too_large": "Файл слишком большой",
+    "cannot_read": "Не удалось прочитать файл"
+  }
+}
