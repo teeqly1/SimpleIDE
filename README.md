@@ -1,76 +1,48 @@
-![Simple IDE](icon.svg)
-
 # SimpleIDE
 
-A lightweight and fast IDE for coding.
+Lightweight IDE for coding with Python and web technologies.
 
-## Features
+## What it does
 
-### Project Management
-- Create new project (creates folder with `project.json`)
-- Open existing project (requires `project.json`)
-- Initialize project in existing folder (auto-creates `project.json`)
-- Recent projects history with quick access
+SimpleIDE is a desktop code editor that runs in its own window. It provides:
 
-### File Manager
-- File tree with collapsible folders
-- Create, delete, rename files and folders
-- Drag and drop support
-- Right-click context menu
-- Safe path handling (cannot access outside project folder)
+- **Project management** - create, open, and initialize projects with `project.json`
+- **File explorer** - browse files and folders with drag and drop support
+- **Code editor** - syntax highlighting for 40+ languages (Python, JavaScript, C, C++, Java, Go, Rust, HTML, CSS, and more)
+- **Code execution** - run Python and JavaScript files directly
+- **Built-in console** - view output and type commands
+- **HTML preview** - live preview of HTML files
+- **Multiple tabs** - open several files at once
+- **Language support** - Russian and English interface
+- **Customizable** - choose theme, font size, and background image
 
-### Code Editor
-- Syntax highlighting for 40+ languages:
-  Python, JavaScript, TypeScript, C, C++, C#, Java, Kotlin, Go, Rust, Swift, PHP, Ruby, HTML, CSS, SCSS, Less, SQL, Shell, Bash, YAML, JSON, Markdown, Dockerfile, and more
-- Line numbers
-- Code folding
-- Bracket matching and auto-closing
-- Tabbed interface for multiple files
+## Why this IDE is lightweight
 
-### HTML Preview
-- Built-in iframe preview for HTML files
-- Auto-refresh on save
-
-### Code Execution
-- Run Python files (`.py`)
-- Run JavaScript files (`.js`)
-- Pre-launch commands support
-- Stop execution button
-
-### Console
-- Real-time output from running processes
-- Command input (type commands directly in console)
-- Command history (arrow keys)
-- Clear console button
-
-### Settings
-- Language selection (Russian, English) with localStorage persistence
-- Editor theme (Monokai, Dracula, Material, Eclipse)
-- Font size (12px, 14px, 16px, 18px)
-- Custom background image upload
-
-### UI/UX
-- Loading screen with progress bar
-- Toast notifications
-- Animated buttons, modals, and context menus
+- Built with **Python + Eel** - uses system browser for UI, no heavy frameworks
+- **No Electron** - doesn't bundle Chromium (uses your installed Chrome/Edge)
+- **Minimal dependencies** - only `eel` and `watchdog`
+- **Vanilla JavaScript** - no React, Vue, or Angular
+- **Small footprint** - EXE is ~15MB, uses ~50MB RAM
+- **Fast startup** - loads in 1-2 seconds
+- **Modular code** - clean architecture, easy to modify
 
 ## Installation
 
-### Method 1: Download EXE
-1. Download `SimpleIDE.exe` from [Releases](https://github.com/username/SimpleIDE/releases)
-2. Run the executable (requires Chrome or Edge)
+### Download EXE (Windows)
 
-### Method 2: Portable Version
-1. Download `SimpleIDE_portable.zip` from [Releases](https://github.com/username/SimpleIDE/releases)
-2. Extract the archive
+1. Download `SimpleIDE.exe` from [Releases](https://github.com/teeqly/SimpleIDE/releases)
+2. Run it (requires Chrome or Edge installed)
+
+### Portable version
+
+1. Download `SimpleIDE_portable.zip` from [Releases](https://github.com/teeqly/SimpleIDE/releases)
+2. Extract anywhere
 3. Run `start.bat` (installs dependencies and launches IDE)
 
-### Method 3: From Source
+### From source
+
 ```bash
-git clone https://github.com/username/SimpleIDE.git
+git clone https://github.com/teeqly/SimpleIDE.git
 cd SimpleIDE
-python -m venv venv
-venv\Scripts\activate  # Windows
-# source venv/bin/activate  # Linux/Mac
 pip install -r requirements.txt
 python app.py
