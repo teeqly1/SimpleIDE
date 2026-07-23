@@ -1,3 +1,7 @@
+[EN](README.md) | [RU](README_RU.md)
+
+![S](icon.svg)
+
 
 # SimpleIDE
 
