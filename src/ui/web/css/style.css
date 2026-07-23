@@ -816,3 +816,153 @@ body.welcome-page {
 .welcome-btn.primary .btn-text small {
     color: rgba(255, 255, 255, 0.6);
 }
+/* Меню бар */
+#menubar {
+    background: #1e1e1e;
+    border-bottom: 1px solid #3e3e42;
+    display: flex;
+    padding: 0 10px;
+    user-select: none;
+}
+
+.menu-item {
+    position: relative;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #ccc;
+    border-radius: 4px;
+}
+
+.menu-item:hover {
+    background: #3e3e42;
+}
+
+.menu-item:hover .dropdown {
+    display: block;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #252526;
+    border: 1px solid #3e3e42;
+    border-radius: 6px;
+    min-width: 220px;
+    z-index: 10000;
+    padding: 4px 0;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #ccc;
+}
+
+.dropdown-item:hover {
+    background: #0e639c;
+}
+
+.dropdown-item i {
+    width: 20px;
+    margin-right: 8px;
+}
+
+.shortcut {
+    color: #666;
+    font-size: 11px;
+    margin-left: 20px;
+}
+
+.dropdown-separator {
+    border-top: 1px solid #3e3e42;
+    margin: 4px 0;
+}
+
+/* Поиск */
+.search-popup {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    background: #252526;
+    border: 1px solid #0e639c;
+    border-radius: 8px;
+    padding: 12px;
+    z-index: 10001;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    display: none;
+    min-width: 320px;
+}
+
+.search-popup.show {
+    display: block;
+    animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.search-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.search-row input {
+    flex: 1;
+    padding: 6px 10px;
+    background: #1e1e1e;
+    border: 1px solid #3e3e42;
+    color: #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+    outline: none;
+}
+
+.search-row input:focus {
+    border-color: #0e639c;
+}
+
+.search-row button {
+    padding: 6px 10px;
+    background: #3e3e42;
+    border: none;
+    color: #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.search-row button:hover {
+    background: #0e639c;
+}
+
+.search-info {
+    font-size: 11px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.search-options {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: #969696;
+}
+
+.search-options label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}

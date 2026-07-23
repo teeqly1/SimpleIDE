@@ -5,19 +5,178 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple IDE - Редактор</title>
     
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- CodeMirror -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/foldgutter.min.css">
-    
-    <!-- Собственные стили -->
     <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        /* Меню бар */
+        #menubar {
+            background: #1e1e1e;
+            border-bottom: 1px solid #3e3e42;
+            display: flex;
+            padding: 0 10px;
+            user-select: none;
+        }
+        .menu-item {
+            position: relative;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #ccc;
+            border-radius: 4px;
+        }
+        .menu-item:hover { background: #3e3e42; }
+        .menu-item:hover .dropdown { display: block; }
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #252526;
+            border: 1px solid #3e3e42;
+            border-radius: 6px;
+            min-width: 220px;
+            z-index: 10000;
+            padding: 4px 0;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #ccc;
+        }
+        .dropdown-item:hover { background: #0e639c; }
+        .dropdown-item i { width: 20px; margin-right: 8px; }
+        .shortcut { color: #666; font-size: 11px; margin-left: 20px; }
+        .dropdown-separator { border-top: 1px solid #3e3e42; margin: 4px 0; }
+        
+        /* Поиск */
+        .search-popup {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background: #252526;
+            border: 1px solid #0e639c;
+            border-radius: 8px;
+            padding: 12px;
+            z-index: 10001;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            display: none;
+            min-width: 320px;
+        }
+        .search-popup.show { display: block; animation: slideDown 0.2s ease; }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .search-row input {
+            flex: 1;
+            padding: 6px 10px;
+            background: #1e1e1e;
+            border: 1px solid #3e3e42;
+            color: #ccc;
+            border-radius: 4px;
+            font-size: 13px;
+            outline: none;
+        }
+        .search-row input:focus { border-color: #0e639c; }
+        .search-row button {
+            padding: 6px 10px;
+            background: #3e3e42;
+            border: none;
+            color: #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .search-row button:hover { background: #0e639c; }
+        .search-info { font-size: 11px; color: #666; margin-top: 4px; }
+        .search-options {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: #969696;
+        }
+        .search-options label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
+    <!-- Меню бар -->
+    <div id="menubar">
+        <div class="menu-item" data-menu="file">
+            File
+            <div class="dropdown">
+                <div class="dropdown-item" onclick="window.ide.createNewFile()">
+                    <i class="fas fa-file-plus"></i> New File <span class="shortcut">Ctrl+N</span>
+                </div>
+                <div class="dropdown-item" onclick="window.ide.explorer.createFolder()">
+                    <i class="fas fa-folder-plus"></i> New Folder
+                </div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="window.ide.saveCurrentFile()">
+                    <i class="fas fa-save"></i> Save <span class="shortcut">Ctrl+S</span>
+                </div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="window.ide.closeCurrentTab()">
+                    <i class="fas fa-times"></i> Close Tab
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-item" data-menu="edit">
+            Edit
+            <div class="dropdown">
+                <div class="dropdown-item" onclick="window.ide.search.show()">
+                    <i class="fas fa-search"></i> Find... <span class="shortcut">Ctrl+F</span>
+                </div>
+                <div class="dropdown-item" onclick="window.ide.search.findNext()">
+                    <i class="fas fa-arrow-down"></i> Find Next <span class="shortcut">F3</span>
+                </div>
+                <div class="dropdown-item" onclick="window.ide.search.findPrev()">
+                    <i class="fas fa-arrow-up"></i> Find Previous <span class="shortcut">Shift+F3</span>
+                </div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="window.ide.search.showReplace()">
+                    <i class="fas fa-exchange-alt"></i> Replace... <span class="shortcut">Ctrl+H</span>
+                </div>
+                <div class="dropdown-item" onclick="window.ide.search.replaceNext()">
+                    <i class="fas fa-step-forward"></i> Replace Next
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-item" data-menu="view">
+            View
+            <div class="dropdown">
+                <div class="dropdown-item" onclick="window.ide.console.clear()">
+                    <i class="fas fa-trash-alt"></i> Clear Console
+                </div>
+                <div class="dropdown-item" onclick="window.ide.togglePreview()">
+                    <i class="fas fa-eye"></i> Toggle Preview
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Верхняя панель инструментов -->
     <div id="toolbar">
         <div class="toolbar-left">
@@ -49,7 +208,6 @@
 
     <!-- Основная рабочая область -->
     <div id="main-container">
-        <!-- Левая панель - Файловый менеджер -->
         <div id="explorer-panel">
             <div class="panel-header">
                 <h3 id="project-root-name">Проводник</h3>
@@ -70,9 +228,7 @@
             </div>
         </div>
 
-        <!-- Центральная область -->
         <div id="editor-panel">
-            <!-- Вкладки открытых файлов -->
             <div id="tabs-bar">
                 <div class="tabs-container">
                     <div class="tab active" data-path="">
@@ -81,13 +237,9 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Редактор кода -->
             <div id="editor-container">
                 <textarea id="code-editor"></textarea>
             </div>
-            
-            <!-- Консоль вывода -->
             <div id="console-panel">
                 <div class="panel-header">
                     <h3>Консоль</h3>
@@ -103,7 +255,7 @@
         </div>
     </div>
 
-    <!-- Модальное окно настроек проекта -->
+    <!-- Модальное окно настроек -->
     <div id="settings-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -113,9 +265,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="start-file">Стартовый файл:</label>
-                    <select id="start-file">
-                        <option value="">Выберите файл...</option>
-                    </select>
+                    <select id="start-file"><option value="">Выберите файл...</option></select>
                 </div>
                 <div class="form-group">
                     <label for="pre-command">Команда перед запуском:</label>
@@ -131,28 +281,16 @@
 
     <!-- Контекстное меню -->
     <div id="context-menu" class="context-menu">
-        <div class="context-item" data-action="open">
-            <i class="fas fa-folder-open"></i> Открыть
-        </div>
-        <div class="context-item" data-action="new-file">
-            <i class="fas fa-file-plus"></i> Новый файл
-        </div>
-        <div class="context-item" data-action="new-folder">
-            <i class="fas fa-folder-plus"></i> Новая папка
-        </div>
+        <div class="context-item" data-action="open"><i class="fas fa-folder-open"></i> Открыть</div>
+        <div class="context-item" data-action="new-file"><i class="fas fa-file-plus"></i> Новый файл</div>
+        <div class="context-item" data-action="new-folder"><i class="fas fa-folder-plus"></i> Новая папка</div>
         <div class="context-separator"></div>
-        <div class="context-item" data-action="rename">
-            <i class="fas fa-edit"></i> Переименовать
-        </div>
-        <div class="context-item" data-action="delete">
-            <i class="fas fa-trash"></i> Удалить
-        </div>
+        <div class="context-item" data-action="rename"><i class="fas fa-edit"></i> Переименовать</div>
+        <div class="context-item" data-action="delete"><i class="fas fa-trash"></i> Удалить</div>
     </div>
 
-    <!-- CodeMirror Core -->
+    <!-- CodeMirror -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
-    
-    <!-- Языковые модули CodeMirror -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
@@ -169,25 +307,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/shell/shell.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/yaml/yaml.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/dockerfile/dockerfile.min.js"></script>
-    
-    <!-- Аддоны CodeMirror -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchtags.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/foldcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/foldgutter.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/indent-fold.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/brace-fold.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/selection/active-line.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/javascript-hint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/html-hint.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/css-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/search/search.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/search/searchcursor.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/dialog/dialog.min.js"></script>
     
-    <!-- Eel -->
     <script type="text/javascript" src="/eel.js"></script>
-    
-    <!-- Модули IDE -->
     <script src="js/languages.js"></script>
     <script src="js/editor.js"></script>
     <script src="js/file-explorer.js"></script>

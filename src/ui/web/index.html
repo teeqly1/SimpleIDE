@@ -276,61 +276,37 @@
             'ru': {
                 "app": {"name": "Simple IDE", "description": "Легкая среда разработки"},
                 "welcome": {
-                    "create_project": "Создать проект",
-                    "create_project_desc": "Создать новую папку с проектом",
-                    "open_project": "Открыть проект",
-                    "open_project_desc": "Открыть существующий проект (project.json)",
-                    "init_project": "Инициализировать проект",
-                    "init_project_desc": "Создать project.json в существующей папке",
-                    "recent_projects": "Последние проекты",
-                    "no_recent": "Нет недавних проектов",
-                    "settings": "Настройки",
-                    "settings_desc": "Настроить IDE"
+                    "create_project": "Создать проект", "create_project_desc": "Создать новую папку с проектом",
+                    "open_project": "Открыть проект", "open_project_desc": "Открыть существующий проект (project.json)",
+                    "init_project": "Инициализировать проект", "init_project_desc": "Создать project.json в существующей папке",
+                    "recent_projects": "Последние проекты", "no_recent": "Нет недавних проектов",
+                    "settings": "Настройки", "settings_desc": "Настроить IDE"
                 },
                 "settings": {
-                    "language": "Язык интерфейса:",
-                    "language_tab": "Язык",
-                    "language_title": "Язык интерфейса",
-                    "appearance_tab": "Визуализация",
-                    "appearance_title": "Визуализация",
-                    "background_tab": "Обои",
-                    "background_title": "Обои",
-                    "theme": "Тема редактора:",
-                    "font_size": "Размер шрифта:",
-                    "choose_bg": "Выберите изображение для фона:",
-                    "reset_bg": "Сбросить фон",
-                    "save": "Сохранить",
-                    "cancel": "Отмена"
+                    "language": "Язык интерфейса:", "language_tab": "Язык", "language_title": "Язык интерфейса",
+                    "appearance_tab": "Визуализация", "appearance_title": "Визуализация",
+                    "background_tab": "Обои", "background_title": "Обои",
+                    "theme": "Тема редактора:", "font_size": "Размер шрифта:",
+                    "choose_bg": "Выберите изображение для фона:", "reset_bg": "Сбросить фон",
+                    "save": "Сохранить", "cancel": "Отмена"
                 }
             },
             'en': {
                 "app": {"name": "Simple IDE", "description": "Lightweight Development Environment"},
                 "welcome": {
-                    "create_project": "Create Project",
-                    "create_project_desc": "Create a new folder with project",
-                    "open_project": "Open Project",
-                    "open_project_desc": "Open existing project (project.json)",
-                    "init_project": "Initialize Project",
-                    "init_project_desc": "Create project.json in existing folder",
-                    "recent_projects": "Recent Projects",
-                    "no_recent": "No recent projects",
-                    "settings": "Settings",
-                    "settings_desc": "Configure IDE"
+                    "create_project": "Create Project", "create_project_desc": "Create a new folder with project",
+                    "open_project": "Open Project", "open_project_desc": "Open existing project (project.json)",
+                    "init_project": "Initialize Project", "init_project_desc": "Create project.json in existing folder",
+                    "recent_projects": "Recent Projects", "no_recent": "No recent projects",
+                    "settings": "Settings", "settings_desc": "Configure IDE"
                 },
                 "settings": {
-                    "language": "Interface language:",
-                    "language_tab": "Language",
-                    "language_title": "Interface Language",
-                    "appearance_tab": "Appearance",
-                    "appearance_title": "Appearance",
-                    "background_tab": "Background",
-                    "background_title": "Background",
-                    "theme": "Editor theme:",
-                    "font_size": "Font size:",
-                    "choose_bg": "Choose background image:",
-                    "reset_bg": "Reset background",
-                    "save": "Save",
-                    "cancel": "Cancel"
+                    "language": "Interface language:", "language_tab": "Language", "language_title": "Interface Language",
+                    "appearance_tab": "Appearance", "appearance_title": "Appearance",
+                    "background_tab": "Background", "background_title": "Background",
+                    "theme": "Editor theme:", "font_size": "Font size:",
+                    "choose_bg": "Choose background image:", "reset_bg": "Reset background",
+                    "save": "Save", "cancel": "Cancel"
                 }
             }
         };
@@ -339,12 +315,11 @@
             document.getElementById('language-select').value = currentLanguage;
             document.getElementById('theme-select').value = localStorage.getItem('ide_theme') || 'monokai';
             document.getElementById('font-size-select').value = localStorage.getItem('ide_font_size') || '14';
-            
-            const bgImage = localStorage.getItem('ide_bg_image');
-            if (bgImage) {
-                document.documentElement.style.setProperty('--bg-image', `url(${bgImage})`);
-                const preview = document.getElementById('bg-preview');
-                if (preview) preview.style.backgroundImage = `url(${bgImage})`;
+            const bg = localStorage.getItem('ide_bg_image');
+            if (bg) {
+                document.documentElement.style.setProperty('--bg-image', `url(${bg})`);
+                const p = document.getElementById('bg-preview');
+                if (p) p.style.backgroundImage = `url(${bg})`;
             }
         }
 
@@ -355,53 +330,31 @@
         }
 
         function applyTranslations() {
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
                 const keys = key.split('.');
-                let value = translations;
-                for (const k of keys) {
-                    if (value && value[k] !== undefined) {
-                        value = value[k];
-                    } else {
-                        value = null;
-                        break;
-                    }
-                }
-                if (typeof value === 'string') {
-                    element.textContent = value;
-                }
+                let v = translations;
+                for (const k of keys) { if (v && v[k] !== undefined) v = v[k]; else { v = null; break; } }
+                if (typeof v === 'string') el.textContent = v;
             });
         }
 
         function getTranslation(key) {
-            const keys = key.split('.');
-            let value = translations;
-            for (const k of keys) {
-                if (value && value[k] !== undefined) {
-                    value = value[k];
-                } else {
-                    return null;
-                }
-            }
-            return typeof value === 'string' ? value : null;
+            const keys = key.split('.'); let v = translations;
+            for (const k of keys) { if (v && v[k] !== undefined) v = v[k]; else return null; }
+            return typeof v === 'string' ? v : null;
         }
 
-        function switchSettingsTab(tabId, element) {
+        function switchSettingsTab(id, el) {
             document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.settings-sidebar-item').forEach(s => s.classList.remove('active'));
-            document.getElementById('section-' + tabId).classList.add('active');
-            element.classList.add('active');
+            document.getElementById('section-' + id).classList.add('active');
+            el.classList.add('active');
         }
 
-        function previewBackground(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('bg-preview').style.backgroundImage = `url(${e.target.result})`;
-                };
-                reader.readAsDataURL(file);
-            }
+        function previewBackground(e) {
+            const f = e.target.files[0];
+            if (f) { const r = new FileReader(); r.onload = (ev) => document.getElementById('bg-preview').style.backgroundImage = `url(${ev.target.result})`; r.readAsDataURL(f); }
         }
 
         function resetBackground() {
@@ -411,136 +364,59 @@
 
         function saveAllSettings() {
             const lang = document.getElementById('language-select').value;
-            const theme = document.getElementById('theme-select').value;
-            const fontSize = document.getElementById('font-size-select').value;
-            
-            // Сохраняем в localStorage
             localStorage.setItem('ide_language', lang);
-            localStorage.setItem('ide_theme', theme);
-            localStorage.setItem('ide_font_size', fontSize);
+            localStorage.setItem('ide_theme', document.getElementById('theme-select').value);
+            localStorage.setItem('ide_font_size', document.getElementById('font-size-select').value);
+            try { eel.save_settings(language=lang, theme=document.getElementById('theme-select').value, font_size=parseInt(document.getElementById('font-size-select').value))(); } catch(e) {}
             
-            // Сохраняем на сервер
-            try {
-                eel.save_settings(language=lang, theme=theme, font_size=parseInt(fontSize))();
-            } catch(e) {}
-            
-            const bgInput = document.getElementById('bg-image-input');
-            
-            function finishSaving() {
-                closeSettings();
-                if (lang !== currentLanguage) {
-                    currentLanguage = lang;
-                    loadTranslations(currentLanguage);
-                }
-            }
-            
-            if (bgInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    localStorage.setItem('ide_bg_image', e.target.result);
-                    document.documentElement.style.setProperty('--bg-image', `url(${e.target.result})`);
-                    finishSaving();
-                };
-                reader.readAsDataURL(bgInput.files[0]);
-            } else {
-                finishSaving();
-            }
+            const bg = document.getElementById('bg-image-input');
+            function done() { closeSettings(); if (lang !== currentLanguage) { currentLanguage = lang; loadTranslations(currentLanguage); } }
+            if (bg.files[0]) {
+                const r = new FileReader();
+                r.onload = (e) => { localStorage.setItem('ide_bg_image', e.target.result); document.documentElement.style.setProperty('--bg-image', `url(${e.target.result})`); done(); };
+                r.readAsDataURL(bg.files[0]);
+            } else { done(); }
         }
 
         async function loadRecentProjects() {
             try {
                 const projects = await eel.get_recent_projects()();
-                const recentList = document.getElementById('recent-list');
-                
-                if (!projects || projects.length === 0) {
-                    const noRecent = getTranslation('welcome.no_recent') || 'No recent projects';
-                    recentList.innerHTML = `<div class="recent-empty"><i class="fas fa-folder-open"></i><span>${noRecent}</span></div>`;
+                const list = document.getElementById('recent-list');
+                if (!projects || !projects.length) {
+                    list.innerHTML = `<div class="recent-empty"><i class="fas fa-folder-open"></i><span>${getTranslation('welcome.no_recent')||'No recent projects'}</span></div>`;
                     return;
                 }
-                
-                recentList.innerHTML = projects.map(p => `
-                    <div class="recent-item" onclick="openRecentProject('${p.path.replace(/\\/g, '\\\\')}')">
-                        <i class="fas fa-folder"></i>
-                        <div class="recent-info">
-                            <div class="recent-name">${p.name}</div>
-                            <div class="recent-path">${p.path}</div>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.log('Projects not loaded');
-            }
+                list.innerHTML = projects.map(p => `<div class="recent-item" onclick="openRecentProject('${p.path.replace(/\\/g,'\\\\')}')"><i class="fas fa-folder"></i><div class="recent-info"><div class="recent-name">${p.name}</div><div class="recent-path">${p.path}</div></div></div>`).join('');
+            } catch(e) {}
         }
 
         async function openRecentProject(path) {
-            const result = await eel.open_project(path)();
-            if (result.success) {
-                localStorage.setItem('currentProject', result.projectPath);
-                window.location.href = 'ide.html';
-            } else {
-                alert('Error: ' + result.error);
-            }
+            const r = await eel.open_project(path)();
+            if (r.success) { localStorage.setItem('currentProject', r.projectPath); window.location.href = 'ide.html'; }
         }
-
         async function createNewProject() {
-            const result = await eel.create_new_project()();
-            if (result.success) {
-                localStorage.setItem('currentProject', result.projectPath);
-                window.location.href = 'ide.html';
-            } else if (result.error) {
-                alert(result.error);
-            }
+            const r = await eel.create_new_project()();
+            if (r.success) { localStorage.setItem('currentProject', r.projectPath); window.location.href = 'ide.html'; }
         }
-
         async function openProject() {
-            const result = await eel.open_project()();
-            if (result.success) {
-                localStorage.setItem('currentProject', result.projectPath);
-                window.location.href = 'ide.html';
-            } else if (result.error) {
-                alert(result.error);
-            }
+            const r = await eel.open_project()();
+            if (r.success) { localStorage.setItem('currentProject', r.projectPath); window.location.href = 'ide.html'; }
         }
-
         async function initProject() {
-            const result = await eel.create_project_in_existing_folder()();
-            if (result.success) {
-                localStorage.setItem('currentProject', result.projectPath);
-                window.location.href = 'ide.html';
-            } else if (result.error) {
-                alert(result.error);
-            }
+            const r = await eel.create_project_in_existing_folder()();
+            if (r.success) { localStorage.setItem('currentProject', r.projectPath); window.location.href = 'ide.html'; }
         }
 
-        function openSettings() {
-            document.getElementById('settings-modal').classList.add('show');
-            document.getElementById('language-select').value = currentLanguage;
-        }
+        function openSettings() { document.getElementById('settings-modal').classList.add('show'); document.getElementById('language-select').value = currentLanguage; }
+        function closeSettings() { document.getElementById('settings-modal').classList.remove('show'); }
+        function closeSettingsOutside(e) { if (e.target === document.getElementById('settings-modal')) closeSettings(); }
 
-        function closeSettings() {
-            document.getElementById('settings-modal').classList.remove('show');
-        }
-
-        function closeSettingsOutside(e) {
-            if (e.target === document.getElementById('settings-modal')) {
-                closeSettings();
-            }
-        }
-
-        // Загрузка языка с сервера при старте
         async function init() {
             try {
-                const serverSettings = await eel.get_settings()();
-                if (serverSettings && serverSettings.language) {
-                    currentLanguage = serverSettings.language;
-                    localStorage.setItem('ide_language', currentLanguage);
-                } else {
-                    currentLanguage = localStorage.getItem('ide_language') || 'ru';
-                }
-            } catch(e) {
-                currentLanguage = localStorage.getItem('ide_language') || 'ru';
-            }
-            
+                const ss = await eel.get_settings()();
+                if (ss && ss.language) { currentLanguage = ss.language; localStorage.setItem('ide_language', currentLanguage); }
+                else currentLanguage = localStorage.getItem('ide_language') || 'ru';
+            } catch(e) { currentLanguage = localStorage.getItem('ide_language') || 'ru'; }
             loadSettings();
             loadTranslations(currentLanguage);
         }

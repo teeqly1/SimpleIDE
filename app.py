@@ -40,17 +40,13 @@ os.makedirs(CONFIG_DIR, exist_ok=True)
 # ===== Конфигурация =====
 class Config:
     def __init__(self):
-        config_dir = os.path.join(os.path.expanduser('~'), '.simple_ide')
-        os.makedirs(config_dir, exist_ok=True)
-        
-        self.settings_file = os.path.join(config_dir, 'settings.json')
-        self.recent_file = os.path.join(config_dir, 'recent_projects.json')
-        self.session_file = os.path.join(config_dir, 'session.json')
-        # ...
+        self.settings_file = os.path.join(CONFIG_DIR, 'settings.json')
+        self.recent_file = os.path.join(CONFIG_DIR, 'recent_projects.json')
+        self.session_file = os.path.join(CONFIG_DIR, 'session.json')
         
         self.settings = self._load_json(self.settings_file, {
             "language": "ru", "theme": "monokai", "font_size": 14,
-            "bg_image": None, "window_width": 1400, "window_height": 900
+            "bg_image": None, "learn": True
         })
         self.recent_projects = self._load_json(self.recent_file, [])
         self.session = self._load_json(self.session_file, {
@@ -81,7 +77,8 @@ class Config:
         return self._save_json(self.recent_file, self.recent_projects)
     
     def save_session(self, **kwargs):
-        self.session.update(kwargs)
+        if kwargs:
+            self.session.update(kwargs)
         return self._save_json(self.session_file, self.session)
 
 config = Config()
@@ -271,7 +268,9 @@ def get_recent_projects(): return config.recent_projects
 @eel.expose
 def get_session(): return config.session
 @eel.expose
-def save_session(**kwargs): return config.save_session(**kwargs)
+def save_session(session_data=None):
+    if session_data: return config.save_session(**session_data)
+    return config.save_session()
 @eel.expose
 def create_new_project():
     import tkinter as tk; from tkinter import filedialog, simpledialog
@@ -325,7 +324,6 @@ def save_project_config(c): return pm.save_config(c)
 def execute_command(cmd): return ex.cmd(cmd)
 
 if __name__ == '__main__':
-    # Принудительно создаем конфиг файлы
     config._save_json(config.settings_file, config.settings)
     config._save_json(config.recent_file, config.recent_projects)
     config._save_json(config.session_file, config.session)
