@@ -1,3 +1,4 @@
+
 # SimpleIDE
 
 Lightweight IDE for coding with Python and web technologies.
@@ -46,3 +47,24 @@ git clone https://github.com/teeqly/SimpleIDE.git
 cd SimpleIDE
 pip install -r requirements.txt
 python app.py
+```
+
+### Build from source
+
+```bash
+pip install pyinstaller
+pyinstaller --onefile --windowed --add-data "src;src" --add-data "others;others" --name SimpleIDE app.py
+```
+
+## Requirements
+
+- Windows, Linux, or macOS
+- Python 3.8+ (for source installation)
+- Google Chrome or Microsoft Edge
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.
+
+Original author: [teeqly](https://github.com/teeqly)
+```
