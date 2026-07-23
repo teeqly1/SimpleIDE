@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test LocalStorage</title>
+</head>
+<body>
+    <h1>LocalStorage Test</h1>
+    <button onclick="saveRU()">Save Russian</button>
+    <button onclick="saveEN()">Save English</button>
+    <button onclick="check()">Check Language</button>
+    <div id="result"></div>
+
+    <script>
+        function saveRU() {
+            localStorage.setItem('ide_language', 'ru');
+            document.getElementById('result').textContent = 'Saved: ru';
+        }
+        
+        function saveEN() {
+            localStorage.setItem('ide_language', 'en');
+            document.getElementById('result').textContent = 'Saved: en';
+        }
+        
+        function check() {
+            const lang = localStorage.getItem('ide_language');
+            document.getElementById('result').textContent = 'Current: ' + lang;
+        }
+        
+        // Показать текущий язык при загрузке
+        check();
+    </script>
+</body>
+</html>
