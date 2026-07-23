@@ -54,10 +54,6 @@ A lightweight and fast IDE for coding.
 - Toast notifications
 - Animated buttons, modals, and context menus
 
-## Screenshots
-
-*Add screenshots here*
-
 ## Installation
 
 ### Method 1: Download EXE
