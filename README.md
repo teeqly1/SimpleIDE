@@ -32,13 +32,7 @@ SimpleIDE is a desktop code editor that runs in its own window. It provides:
 ### Download EXE (Windows)
 
 1. Download `SimpleIDE.exe` from [Releases](https://github.com/teeqly/SimpleIDE/releases)
-2. Run it (requires Chrome or Edge installed)
-
-### Portable version
-
-1. Download `SimpleIDE_portable.zip` from [Releases](https://github.com/teeqly/SimpleIDE/releases)
-2. Extract anywhere
-3. Run `start.bat` (installs dependencies and launches IDE)
+2. Run it (Any installed browser is required.)
 
 ### From source
 
