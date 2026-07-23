@@ -55,6 +55,3 @@ pyinstaller --onefile --windowed --add-data "src;src" --add-data "others;others"
 - Windows, Linux, or macOS
 - Python 3.8+ (for source installation)
 - Google Chrome or Microsoft Edge
-
-## License
-
