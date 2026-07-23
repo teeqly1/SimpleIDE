@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple IDE - Загрузка</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #1e1e1e;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        
+        .loading-container {
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .loading-icon {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 40px;
+        }
+        
+        .loading-icon i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: #0e639c;
+            z-index: 2;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        .spinner-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
+            border-top-color: #0e639c;
+            border-right-color: #0e639c;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+        }
+        
+        .spinner-ring:nth-child(2) {
+            width: 90%;
+            height: 90%;
+            top: 5%;
+            left: 5%;
+            border-top-color: #1177bb;
+            border-left-color: #1177bb;
+            border-right-color: transparent;
+            animation-duration: 2s;
+            animation-direction: reverse;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-title {
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+        
+        .progress-container {
+            width: 400px;
+            margin: 0 auto 20px;
+        }
+        
+        .progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: #2d2d30;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0e639c, #4fc1ff);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .progress-text {
+            color: #969696;
+            font-size: 14px;
+            margin-top: 12px;
+            min-height: 20px;
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.3;
+            transition: all 0.5s ease;
+        }
+        
+        .step.active {
+            opacity: 1;
+        }
+        
+        .step.done {
+            opacity: 1;
+            color: #4caf50;
+        }
+        
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border: 2px solid currentColor;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .step.done .step-icon {
+            background: #4caf50;
+            border-color: #4caf50;
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 12px;
+            color: #969696;
+        }
+        
+        .version-text {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="loading-icon">
+            <i class="fas fa-code"></i>
+            <div class="spinner-ring"></div>
+            <div class="spinner-ring"></div>
+        </div>
+        
+        <div class="loading-title">Simple IDE</div>
+        
+        <div class="progress-container">
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
+            <div class="progress-text" id="progress-status">Инициализация...</div>
+        </div>
+        
+        <div class="steps">
+            <div class="step" id="step-check">
+                <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="step-label">Проверка</div>
+            </div>
+            <div class="step" id="step-load">
+                <div class="step-icon"><i class="fas fa-folder-open"></i></div>
+                <div class="step-label">Загрузка</div>
+            </div>
+            <div class="step" id="step-ready">
+                <div class="step-icon"><i class="fas fa-check"></i></div>
+                <div class="step-label">Готово</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="version-text">v1.0.0</div>
+
+    <script type="text/javascript" src="/eel.js"></script>
+    <script>
+        const fill = document.getElementById('progress-fill');
+        const status = document.getElementById('progress-status');
+        const savedLanguage = localStorage.getItem('ide_language') || 'ru';
+        
+        function updateProgress(value, text, step) {
+            fill.style.width = value + '%';
+            if (text) status.textContent = text;
+            
+            if (value >= 33) completeStep('step-check');
+            if (value >= 66) {
+                completeStep('step-check');
+                activateStep('step-load');
+            }
+            if (value >= 90) {
+                completeStep('step-load');
+                activateStep('step-ready');
+            }
+        }
+        
+        function activateStep(id) {
+            const el = document.getElementById(id);
+            if (el && !el.classList.contains('done')) {
+                el.classList.add('active');
+            }
+        }
+        
+        function completeStep(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.remove('active');
+                el.classList.add('done');
+            }
+        }
+        
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        async function loadIDE() {
+            updateProgress(10, 'Проверка окружения...');
+            await sleep(400);
+            
+            updateProgress(25, 'Загрузка настроек...');
+            await sleep(300);
+            
+            updateProgress(40, 'Загрузка языкового пакета...');
+            try {
+                await eel.get_language(savedLanguage)();
+            } catch(e) {}
+            await sleep(300);
+            
+            updateProgress(60, 'Инициализация интерфейса...');
+            await sleep(400);
+            
+            updateProgress(80, 'Подготовка редактора...');
+            await sleep(300);
+            
+            updateProgress(95, 'Завершение...');
+            await sleep(200);
+            
+            updateProgress(100, 'Готово!');
+            completeStep('step-ready');
+            
+            await sleep(300);
+            
+            document.querySelector('.loading-container').style.opacity = '0';
+            document.querySelector('.loading-container').style.transition = 'opacity 0.5s';
+            
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 500);
+        }
+        
+        loadIDE();
+    </script>
+</body>
+</html>

@@ -4,18 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple IDE</title>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg-image: none;
         }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             background: #1e1e1e;
+            background-image: var(--bg-image);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             color: #cccccc;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             min-height: 100vh;
@@ -28,254 +30,126 @@
         .welcome-wrapper {
             width: 100%;
             max-width: 900px;
+            background: rgba(30, 30, 30, 0.92);
+            border-radius: 12px;
+            padding: 50px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: fadeIn 0.5s ease;
         }
         
-        .welcome-logo {
-            text-align: center;
-            margin-bottom: 50px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
-        .welcome-logo i {
-            font-size: 80px;
-            color: #0e639c;
-            margin-bottom: 20px;
-        }
+        .welcome-logo { text-align: center; margin-bottom: 50px; }
+        .welcome-logo i { font-size: 80px; color: #0e639c; margin-bottom: 20px; }
+        .welcome-logo h1 { font-size: 48px; font-weight: 300; color: #ffffff; margin-bottom: 10px; }
+        .welcome-logo p { font-size: 18px; color: #969696; }
         
-        .welcome-logo h1 {
-            font-size: 48px;
-            font-weight: 300;
-            color: #ffffff;
-            margin-bottom: 10px;
-        }
+        .welcome-content { display: flex; gap: 40px; align-items: flex-start; }
         
-        .welcome-logo p {
-            font-size: 18px;
-            color: #969696;
-        }
+        .recent-section { flex: 1; }
+        .recent-title { color: #969696; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .recent-list { max-height: 300px; overflow-y: auto; }
+        .recent-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; border-radius: 4px; margin-bottom: 2px; transition: background 0.2s; }
+        .recent-item:hover { background: rgba(255, 255, 255, 0.08); }
+        .recent-item i { color: #e8ab53; font-size: 18px; width: 20px; }
+        .recent-info { overflow: hidden; }
+        .recent-name { color: #cccccc; font-size: 13px; }
+        .recent-path { color: #666; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .recent-empty { color: #666; font-size: 13px; padding: 20px; text-align: center; }
+        .recent-empty i { font-size: 32px; display: block; margin-bottom: 8px; opacity: 0.2; }
         
-        .welcome-content {
-            display: flex;
-            gap: 40px;
-            align-items: flex-start;
-        }
-        
-        .recent-section {
-            flex: 1;
-        }
-        
-        .recent-title {
-            color: #969696;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
-        
-        .recent-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        
-        .recent-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            cursor: pointer;
-            border-radius: 4px;
-            margin-bottom: 2px;
-            transition: background 0.2s;
-        }
-        
-        .recent-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .recent-item i {
-            color: #e8ab53;
-            font-size: 18px;
-            width: 20px;
-        }
-        
-        .recent-info {
-            overflow: hidden;
-        }
-        
-        .recent-name {
-            color: #cccccc;
-            font-size: 13px;
-        }
-        
-        .recent-path {
-            color: #666;
-            font-size: 11px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .recent-empty {
-            color: #666;
-            font-size: 13px;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .recent-empty i {
-            font-size: 32px;
-            display: block;
-            margin-bottom: 8px;
-            opacity: 0.2;
-        }
-        
-        .actions-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .actions-section { flex: 1; display: flex; flex-direction: column; gap: 12px; }
         
         .welcome-btn {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 16px 20px;
-            background: #2d2d30;
-            border: 1px solid #3e3e42;
-            border-radius: 8px;
-            color: #cccccc;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: left;
-            width: 100%;
+            display: flex; align-items: center; gap: 15px;
+            padding: 16px 20px; background: #2d2d30; border: 1px solid #3e3e42;
+            border-radius: 8px; color: #cccccc; cursor: pointer;
+            transition: all 0.3s; text-align: left; width: 100%;
+        }
+        .welcome-btn:hover { background: #3e3e42; border-color: #0e639c; transform: translateX(5px); }
+        .welcome-btn:active { transform: scale(0.98); }
+        .welcome-btn.primary { background: #0e639c; border-color: #0e639c; color: white; }
+        .welcome-btn.primary:hover { background: #1177bb; }
+        .welcome-btn i { font-size: 28px; width: 35px; text-align: center; }
+        .btn-text { display: flex; flex-direction: column; }
+        .btn-text span { font-size: 16px; font-weight: 500; margin-bottom: 2px; }
+        .btn-text small { font-size: 12px; color: #969696; }
+        .welcome-btn.primary .btn-text small { color: rgba(255, 255, 255, 0.7); }
+        .settings-btn { margin-top: 20px; border-style: dashed; }
+        
+        /* Большая панель настроек */
+        .settings-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); z-index: 1000;
+            justify-content: center; align-items: center;
+        }
+        .settings-overlay.show { display: flex; }
+        
+        .settings-panel {
+            display: flex; width: 800px; height: 500px;
+            background: #252526; border: 1px solid #3e3e42; border-radius: 12px;
+            overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: modalFadeIn 0.3s ease;
         }
         
-        .welcome-btn:hover {
-            background: #3e3e42;
-            border-color: #0e639c;
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
         
-        .welcome-btn.primary {
-            background: #0e639c;
-            border-color: #0e639c;
-            color: white;
+        .settings-sidebar {
+            width: 200px; background: #1e1e1e; border-right: 1px solid #3e3e42;
+            padding: 20px 0;
         }
         
-        .welcome-btn.primary:hover {
-            background: #1177bb;
+        .settings-sidebar-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 20px; cursor: pointer; color: #969696;
+            transition: all 0.2s; font-size: 14px;
+        }
+        .settings-sidebar-item:hover { background: #2d2d30; color: #ccc; }
+        .settings-sidebar-item.active { background: #0e639c; color: white; }
+        .settings-sidebar-item i { width: 20px; text-align: center; }
+        
+        .settings-content {
+            flex: 1; padding: 30px; overflow-y: auto;
         }
         
-        .welcome-btn i {
-            font-size: 28px;
-            width: 35px;
-            text-align: center;
+        .settings-content h2 {
+            color: #fff; font-size: 20px; margin-bottom: 25px;
+            display: flex; align-items: center; gap: 10px;
         }
         
-        .btn-text {
-            display: flex;
-            flex-direction: column;
+        .settings-section { display: none; }
+        .settings-section.active { display: block; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; color: #969696; font-size: 13px; margin-bottom: 8px; }
+        .form-group select, .form-group input[type="file"] {
+            width: 100%; padding: 10px; background: #1e1e1e;
+            border: 1px solid #3e3e42; color: #ccc; border-radius: 4px; font-size: 14px;
         }
         
-        .btn-text span {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 2px;
+        .bg-preview {
+            width: 100%; height: 200px; background: #1e1e1e;
+            border: 1px solid #3e3e42; border-radius: 8px; margin-top: 10px;
+            background-size: cover; background-position: center;
         }
         
-        .btn-text small {
-            font-size: 12px;
-            color: #969696;
+        .settings-footer {
+            display: flex; justify-content: flex-end; gap: 10px; margin-top: 30px;
+            padding-top: 20px; border-top: 1px solid #3e3e42;
         }
         
-        .welcome-btn.primary .btn-text small {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .settings-btn {
-            margin-top: 20px;
-            border-style: dashed;
-        }
-        
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-overlay.show {
-            display: flex;
-        }
-        
-        .modal-box {
-            background: #252526;
-            border: 1px solid #3e3e42;
-            border-radius: 8px;
-            padding: 24px;
-            width: 400px;
-            max-width: 90%;
-        }
-        
-        .modal-box h2 {
-            color: #fff;
-            margin-bottom: 20px;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .modal-box label {
-            color: #969696;
-            font-size: 13px;
-            display: block;
-            margin-bottom: 8px;
-        }
-        
-        .modal-box select {
-            width: 100%;
-            padding: 10px;
-            background: #1e1e1e;
-            border: 1px solid #3e3e42;
-            color: #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-        
-        .modal-buttons button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-        
-        .btn-cancel {
-            background: #3e3e42;
-            color: #ccc;
-        }
-        
-        .btn-save {
-            background: #0e639c;
-            color: white;
-        }
-        
-        .btn-save:hover {
-            background: #1177bb;
-        }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .btn-primary { background: #0e639c; color: white; }
+        .btn-primary:hover { background: #1177bb; }
+        .btn-secondary { background: #3e3e42; color: #ccc; }
+        .btn-secondary:hover { background: #555; }
     </style>
 </head>
 <body>
@@ -288,64 +162,96 @@
         
         <div class="welcome-content">
             <div class="recent-section">
-                <div class="recent-title">
-                    <i class="fas fa-history"></i> <span data-i18n="welcome.recent_projects">Последние проекты</span>
-                </div>
+                <div class="recent-title"><i class="fas fa-history"></i> <span data-i18n="welcome.recent_projects">Последние проекты</span></div>
                 <div class="recent-list" id="recent-list">
-                    <div class="recent-empty">
-                        <i class="fas fa-folder-open"></i>
-                        <span data-i18n="welcome.no_recent">Нет недавних проектов</span>
-                    </div>
+                    <div class="recent-empty"><i class="fas fa-folder-open"></i><span data-i18n="welcome.no_recent">Нет недавних проектов</span></div>
                 </div>
             </div>
             
             <div class="actions-section">
                 <button class="welcome-btn primary" onclick="createNewProject()">
                     <i class="fas fa-folder-plus"></i>
-                    <div class="btn-text">
-                        <span data-i18n="welcome.create_project">Создать проект</span>
-                        <small data-i18n="welcome.create_project_desc">Создать новую папку с проектом</small>
-                    </div>
+                    <div class="btn-text"><span data-i18n="welcome.create_project">Создать проект</span><small data-i18n="welcome.create_project_desc">Создать новую папку с проектом</small></div>
                 </button>
-                
                 <button class="welcome-btn" onclick="openProject()">
                     <i class="fas fa-folder-open"></i>
-                    <div class="btn-text">
-                        <span data-i18n="welcome.open_project">Открыть проект</span>
-                        <small data-i18n="welcome.open_project_desc">Открыть существующий проект (project.json)</small>
-                    </div>
+                    <div class="btn-text"><span data-i18n="welcome.open_project">Открыть проект</span><small data-i18n="welcome.open_project_desc">Открыть существующий проект (project.json)</small></div>
                 </button>
-                
                 <button class="welcome-btn" onclick="initProject()">
                     <i class="fas fa-folder"></i>
-                    <div class="btn-text">
-                        <span data-i18n="welcome.init_project">Инициализировать проект</span>
-                        <small data-i18n="welcome.init_project_desc">Создать project.json в существующей папке</small>
-                    </div>
+                    <div class="btn-text"><span data-i18n="welcome.init_project">Инициализировать проект</span><small data-i18n="welcome.init_project_desc">Создать project.json в существующей папке</small></div>
                 </button>
-                
                 <button class="welcome-btn settings-btn" onclick="openSettings()">
                     <i class="fas fa-cog"></i>
-                    <div class="btn-text">
-                        <span data-i18n="welcome.settings">Настройки</span>
-                        <small data-i18n="welcome.settings_desc">Выбрать язык интерфейса</small>
-                    </div>
+                    <div class="btn-text"><span data-i18n="welcome.settings">Настройки</span><small data-i18n="welcome.settings_desc">Настроить IDE</small></div>
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="settings-modal" onclick="closeSettingsOutside(event)">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <h2><i class="fas fa-cog"></i> <span data-i18n="welcome.settings">Настройки</span></h2>
-            <label data-i18n="settings.language">Язык интерфейса:</label>
-            <select id="language-select">
-                <option value="ru">Русский</option>
-                <option value="en">English</option>
-            </select>
-            <div class="modal-buttons">
-                <button class="btn-cancel" onclick="closeSettings()" data-i18n="settings.cancel">Отмена</button>
-                <button class="btn-save" onclick="saveSettings()" data-i18n="settings.save">Сохранить</button>
+    <!-- Панель настроек -->
+    <div class="settings-overlay" id="settings-modal" onclick="closeSettingsOutside(event)">
+        <div class="settings-panel" onclick="event.stopPropagation()">
+            <div class="settings-sidebar">
+                <div class="settings-sidebar-item active" data-section="language" onclick="switchSettingsTab('language', this)">
+                    <i class="fas fa-globe"></i> <span data-i18n="settings.language_tab">Язык</span>
+                </div>
+                <div class="settings-sidebar-item" data-section="appearance" onclick="switchSettingsTab('appearance', this)">
+                    <i class="fas fa-paint-brush"></i> Визуализация
+                </div>
+                <div class="settings-sidebar-item" data-section="background" onclick="switchSettingsTab('background', this)">
+                    <i class="fas fa-image"></i> Обои
+                </div>
+            </div>
+            
+            <div class="settings-content">
+                <div class="settings-section active" id="section-language">
+                    <h2><i class="fas fa-globe"></i> Язык интерфейса</h2>
+                    <div class="form-group">
+                        <label data-i18n="settings.language">Язык интерфейса:</label>
+                        <select id="language-select">
+                            <option value="ru">Русский</option>
+                            <option value="en">English</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-section" id="section-appearance">
+                    <h2><i class="fas fa-paint-brush"></i> Визуализация</h2>
+                    <div class="form-group">
+                        <label>Тема редактора:</label>
+                        <select id="theme-select">
+                            <option value="monokai">Monokai (Темная)</option>
+                            <option value="dracula">Dracula</option>
+                            <option value="material">Material</option>
+                            <option value="eclipse">Eclipse (Светлая)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Размер шрифта:</label>
+                        <select id="font-size-select">
+                            <option value="12">12px</option>
+                            <option value="14" selected>14px</option>
+                            <option value="16">16px</option>
+                            <option value="18">18px</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-section" id="section-background">
+                    <h2><i class="fas fa-image"></i> Обои</h2>
+                    <div class="form-group">
+                        <label>Выберите изображение для фона:</label>
+                        <input type="file" id="bg-image-input" accept="image/*" onchange="previewBackground(event)">
+                    </div>
+                    <div class="bg-preview" id="bg-preview" style="background-image: var(--bg-image)"></div>
+                    <button class="btn btn-secondary" style="margin-top: 10px;" onclick="resetBackground()">Сбросить фон</button>
+                </div>
+                
+                <div class="settings-footer">
+                    <button class="btn btn-secondary" onclick="closeSettings()" data-i18n="settings.cancel">Отмена</button>
+                    <button class="btn btn-primary" onclick="saveAllSettings()" data-i18n="settings.save">Сохранить</button>
+                </div>
             </div>
         </div>
     </div>
@@ -355,145 +261,136 @@
         let currentLanguage = localStorage.getItem('ide_language') || 'ru';
         let translations = {};
         
-        // Загрузка переводов
+        function loadSettings() {
+            document.getElementById('language-select').value = currentLanguage;
+            document.getElementById('theme-select').value = localStorage.getItem('ide_theme') || 'monokai';
+            document.getElementById('font-size-select').value = localStorage.getItem('ide_font_size') || '14';
+            
+            const bgImage = localStorage.getItem('ide_bg_image');
+            if (bgImage) {
+                document.documentElement.style.setProperty('--bg-image', `url(${bgImage})`);
+                document.getElementById('bg-preview').style.backgroundImage = `url(${bgImage})`;
+            }
+        }
+        
+        function switchSettingsTab(tabId, element) {
+            document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.settings-sidebar-item').forEach(s => s.classList.remove('active'));
+            document.getElementById('section-' + tabId).classList.add('active');
+            element.classList.add('active');
+        }
+        
+        function previewBackground(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('bg-preview').style.backgroundImage = `url(${e.target.result})`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function resetBackground() {
+            document.getElementById('bg-preview').style.backgroundImage = 'none';
+            document.getElementById('bg-image-input').value = '';
+        }
+        
+        function saveAllSettings() {
+            const lang = document.getElementById('language-select').value;
+            localStorage.setItem('ide_language', lang);
+            localStorage.setItem('ide_theme', document.getElementById('theme-select').value);
+            localStorage.setItem('ide_font_size', document.getElementById('font-size-select').value);
+            
+            const bgInput = document.getElementById('bg-image-input');
+            if (bgInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    localStorage.setItem('ide_bg_image', e.target.result);
+                    document.documentElement.style.setProperty('--bg-image', `url(${e.target.result})`);
+                    closeSettings();
+                };
+                reader.readAsDataURL(bgInput.files[0]);
+            } else {
+                localStorage.removeItem('ide_bg_image');
+                document.documentElement.style.setProperty('--bg-image', 'none');
+                closeSettings();
+            }
+            
+            if (lang !== currentLanguage) {
+                currentLanguage = lang;
+                loadTranslations(currentLanguage);
+            }
+        }
+        
         async function loadTranslations(lang) {
             try {
-                const result = await eel.get_language(lang)();
-                translations = result;
+                translations = await eel.get_language(lang)() || {};
                 applyTranslations();
             } catch (error) {
                 console.error('Ошибка загрузки переводов:', error);
             }
         }
         
-        // Применение переводов ко всем элементам с data-i18n
         function applyTranslations() {
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const key = element.getAttribute('data-i18n');
-                const translation = getTranslation(key);
-                if (translation) {
-                    element.textContent = translation;
+                const keys = key.split('.');
+                let value = translations;
+                for (const k of keys) {
+                    if (value && typeof value === 'object' && k in value) value = value[k];
+                    else { value = null; break; }
                 }
+                if (typeof value === 'string') element.textContent = value;
             });
-        }
-        
-        // Получение перевода по ключу (поддерживает вложенные ключи через точку)
-        function getTranslation(key) {
-            const keys = key.split('.');
-            let value = translations;
-            
-            for (const k of keys) {
-                if (value && typeof value === 'object' && k in value) {
-                    value = value[k];
-                } else {
-                    return null;
-                }
-            }
-            
-            return typeof value === 'string' ? value : null;
-        }
-        
-        // Получение перевода (доступно глобально)
-        function t(key, defaultValue = '') {
-            return getTranslation(key) || defaultValue;
         }
         
         async function loadRecentProjects() {
             try {
                 const projects = await eel.get_recent_projects()();
                 const recentList = document.getElementById('recent-list');
-                
                 if (!projects || projects.length === 0) {
-                    recentList.innerHTML = `
-                        <div class="recent-empty">
-                            <i class="fas fa-folder-open"></i>
-                            ${t('welcome.no_recent', 'Нет недавних проектов')}
-                        </div>`;
+                    recentList.innerHTML = '<div class="recent-empty"><i class="fas fa-folder-open"></i>Нет недавних проектов</div>';
                     return;
                 }
-                
                 recentList.innerHTML = projects.map(p => `
                     <div class="recent-item" onclick="openRecentProject('${p.path.replace(/\\/g, '\\\\')}')">
                         <i class="fas fa-folder"></i>
-                        <div class="recent-info">
-                            <div class="recent-name">${p.name}</div>
-                            <div class="recent-path">${p.path}</div>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error('Ошибка загрузки проектов:', error);
-            }
+                        <div class="recent-info"><div class="recent-name">${p.name}</div><div class="recent-path">${p.path}</div></div>
+                    </div>`).join('');
+            } catch (error) { console.error('Ошибка загрузки проектов:', error); }
         }
         
         async function openRecentProject(path) {
             const result = await eel.open_project(path)();
-            if (result.success) {
-                localStorage.setItem('currentProject', result.projectPath);
-                window.location.href = 'ide.html';
-            } else {
-                alert(t('errors.error') + ': ' + result.error);
-            }
+            if (result.success) { localStorage.setItem('currentProject', result.projectPath); window.location.href = 'ide.html'; }
+            else alert('Ошибка: ' + result.error);
         }
         
         async function createNewProject() {
             const result = await eel.create_new_project()();
-            if (result.success) {
-                localStorage.setItem('currentProject', result.projectPath);
-                window.location.href = 'ide.html';
-            } else if (result.error) {
-                alert(result.error);
-            }
+            if (result.success) { localStorage.setItem('currentProject', result.projectPath); window.location.href = 'ide.html'; }
+            else if (result.error) alert(result.error);
         }
         
         async function openProject() {
             const result = await eel.open_project()();
-            if (result.success) {
-                localStorage.setItem('currentProject', result.projectPath);
-                window.location.href = 'ide.html';
-            } else if (result.error) {
-                alert(result.error);
-            }
+            if (result.success) { localStorage.setItem('currentProject', result.projectPath); window.location.href = 'ide.html'; }
+            else if (result.error) alert(result.error);
         }
         
         async function initProject() {
             const result = await eel.create_project_in_existing_folder()();
-            if (result.success) {
-                localStorage.setItem('currentProject', result.projectPath);
-                window.location.href = 'ide.html';
-            } else if (result.error) {
-                alert(result.error);
-            }
+            if (result.success) { localStorage.setItem('currentProject', result.projectPath); window.location.href = 'ide.html'; }
+            else if (result.error) alert(result.error);
         }
         
-        function openSettings() {
-            document.getElementById('settings-modal').classList.add('show');
-            document.getElementById('language-select').value = currentLanguage;
-        }
+        function openSettings() { document.getElementById('settings-modal').classList.add('show'); }
+        function closeSettings() { document.getElementById('settings-modal').classList.remove('show'); }
+        function closeSettingsOutside(e) { if (e.target === document.getElementById('settings-modal')) closeSettings(); }
         
-        function closeSettings() {
-            document.getElementById('settings-modal').classList.remove('show');
-        }
-        
-        function closeSettingsOutside(event) {
-            if (event.target === document.getElementById('settings-modal')) {
-                closeSettings();
-            }
-        }
-        
-        async function saveSettings() {
-            const newLanguage = document.getElementById('language-select').value;
-            if (newLanguage !== currentLanguage) {
-                currentLanguage = newLanguage;
-                localStorage.setItem('ide_language', currentLanguage);
-                await loadTranslations(currentLanguage);
-            }
-            closeSettings();
-        }
-        
-        // Инициализация
         async function init() {
-            document.getElementById('language-select').value = currentLanguage;
+            loadSettings();
             await loadTranslations(currentLanguage);
             await loadRecentProjects();
         }

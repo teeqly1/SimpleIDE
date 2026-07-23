@@ -1,0 +1,96 @@
+{
+  "app": {
+    "name": "Simple IDE",
+    "description": "Lightweight Development Environment"
+  },
+  "welcome": {
+    "create_project": "Create Project",
+    "create_project_desc": "Create a new folder with project",
+    "open_project": "Open Project",
+    "open_project_desc": "Open existing project (project.json)",
+    "init_project": "Initialize Project",
+    "init_project_desc": "Create project.json in existing folder",
+    "recent_projects": "Recent Projects",
+    "no_recent": "No recent projects",
+    "settings": "Settings",
+    "settings_desc": "Select interface language"
+  },
+  "toolbar": {
+    "save": "Save",
+    "run": "Run",
+    "stop": "Stop",
+    "settings": "Project",
+    "back": "Home"
+  },
+  "explorer": {
+    "title": "Explorer",
+    "new_file": "New File",
+    "new_folder": "New Folder",
+    "empty": "Folder is empty",
+    "empty_hint": "Create a new file or folder"
+  },
+  "editor": {
+    "untitled": "untitled"
+  },
+  "console": {
+    "title": "Console",
+    "clear": "Clear console",
+    "welcome": "Welcome to Simple IDE!",
+    "ready": "Ready...",
+    "project_loaded": "Project loaded",
+    "project_created": "Project created",
+    "project_initialized": "Project initialized in",
+    "file_saved": "File saved",
+    "file_created": "File created",
+    "folder_created": "Folder created",
+    "file_deleted": "Deleted",
+    "moved": "Moved",
+    "running": "Running",
+    "stopped": "Execution stopped",
+    "process_finished": "Process finished with code",
+    "files_found": "Files found"
+  },
+  "settings": {
+    "title": "Project Settings",
+    "start_file": "Start file:",
+    "pre_command": "Pre-launch command:",
+    "save": "Save",
+    "cancel": "Cancel",
+    "select_file": "Select file...",
+    "language": "Interface language:"
+  },
+  "context_menu": {
+    "open": "Open",
+    "new_file": "New File",
+    "new_folder": "New Folder",
+    "rename": "Rename",
+    "delete": "Delete"
+  },
+  "messages": {
+    "confirm_delete": "Delete",
+    "enter_file_name": "Enter file name (e.g., script.py):",
+    "enter_folder_name": "Enter folder name:",
+    "enter_new_name": "New name:",
+    "no_project": "Project not open",
+    "no_file_to_save": "No open file to save",
+    "no_start_file": "No start file selected. Open project settings?",
+    "project_not_found": "No project.json found. This is not an IDE project.",
+    "folder_not_selected": "Folder not selected",
+    "project_name_not_specified": "Project name not specified",
+    "error_loading_project": "Project loading error"
+  },
+  "errors": {
+    "error": "Error",
+    "error_loading": "Loading error",
+    "error_saving": "Saving error",
+    "error_creating": "Creation error",
+    "error_opening": "Opening error",
+    "error_running": "Execution error",
+    "error_moving": "Moving error",
+    "file_too_large": "File is too large",
+    "cannot_read": "Cannot read file",
+    "unsupported_file_type": "Unsupported file type",
+    "process_already_running": "Process is already running",
+    "no_running_process": "No running process"
+  }
+}
