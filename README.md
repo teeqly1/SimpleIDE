@@ -58,7 +58,3 @@ pyinstaller --onefile --windowed --add-data "src;src" --add-data "others;others"
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
-
-Original author: [teeqly](https://github.com/teeqly)
-```
